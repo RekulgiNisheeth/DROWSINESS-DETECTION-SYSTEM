@@ -1,0 +1,27 @@
+def activate_brakes():
+    """Function to send brake command to Arduino to stop the motor"""
+    global braking_activated
+    if braking_activated:
+        return  # Already activated
+
+    # Visual indication in console
+    print("EMERGENCY: DROWSINESS DETECTED - STOPPING MOTOR")
+
+    # Send command to Arduino
+    if arduino_connected and arduino_serial:
+        try:
+            # Send command multiple times to ensure receipt
+            for _ in range(3):
+                arduino_serial.write(b'BRAKE\n')
+                time.sleep(0.1)
+
+            # Wait for acknowledgment
+            response = arduino_serial.readline().decode('utf-8', errors='ignore').strip()
+            if "BRAKE_ACKNOWLEDGED" in response:
+                print("Stop motor command confirmed by Arduino")
+            else:
+                print(f"Unexpected response from Arduino: {response}")
+        except Exception as e:
+            print(f"Failed to send stop command to Arduino: {e}")
+
+    braking_activated = True

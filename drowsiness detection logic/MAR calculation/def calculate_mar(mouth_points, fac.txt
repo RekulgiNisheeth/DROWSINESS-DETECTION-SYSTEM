@@ -1,0 +1,27 @@
+def calculate_mar(mouth_points, facial_landmarks):
+    """Calculate Mouth Aspect Ratio (MAR) for yawn detection"""
+    try:
+        # Use inner mouth landmarks for better yawn detection
+        # Vertical distances (use multiple points for robustness)
+        A = dist.euclidean(
+            facial_landmarks[mouth_points[2]],
+            facial_landmarks[mouth_points[7]])
+        B = dist.euclidean(
+            facial_landmarks[mouth_points[3]],
+            facial_landmarks[mouth_points[6]])
+
+        # Horizontal distance
+        C = dist.euclidean(
+            facial_landmarks[mouth_points[0]],
+            facial_landmarks[mouth_points[4]])
+
+        # Prevent division by zero
+        if C == 0:
+            return 0.0
+
+        # Calculate MAR with appropriate scaling
+        mar = (A + B) / (2 * C) * 1.5
+        return mar
+    except Exception as e:
+        print(f"Error calculating MAR: {e}")
+        return 0.0  # Return a default value on error

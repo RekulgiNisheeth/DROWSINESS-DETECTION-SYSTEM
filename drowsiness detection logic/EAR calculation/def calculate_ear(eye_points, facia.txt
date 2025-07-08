@@ -1,0 +1,26 @@
+def calculate_ear(eye_points, facial_landmarks):
+    """Calculate Eye Aspect Ratio (EAR) using the standard formula"""
+    try:
+        # Get the vertical distances between landmarks
+        A = dist.euclidean(
+            facial_landmarks[eye_points[1]],
+            facial_landmarks[eye_points[5]])
+        B = dist.euclidean(
+            facial_landmarks[eye_points[2]],
+            facial_landmarks[eye_points[4]])
+
+        # Get the horizontal distance
+        C = dist.euclidean(
+            facial_landmarks[eye_points[0]],
+            facial_landmarks[eye_points[3]])
+
+        # Prevent division by zero
+        if C == 0:
+            return 1.0
+
+        # Calculate EAR
+        ear = (A + B) / (2.0 * C)
+        return ear
+    except Exception as e:
+        print(f"Error calculating EAR: {e}")
+        return 1.0  # Return a default value on error
