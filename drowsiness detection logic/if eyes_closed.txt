@@ -1,0 +1,26 @@
+if eyes_closed:
+    if eye_close_start_time is None:
+        eye_close_start_time = time.time()
+    elif time.time() - eye_close_start_time > TIME_THRESHOLD:
+        drowsiness_detected = True
+        drowsiness_reason = "EYE CLOSURE"
+else:
+    eye_close_start_time = None
+
+# Yawning Detection
+if yawning:
+    if yawn_start_time is None:
+        yawn_start_time = time.time()
+    elif time.time() - yawn_start_time > TIME_THRESHOLD:
+        drowsiness_detected = True
+        drowsiness_reason = "YAWNING"
+else:
+    yawn_start_time = None
+
+# Head Tilt Detection Logic
+if head_tilt and head_tilt_angle > HEAD_TILT_THRESHOLD:
+    if not drowsiness_detected:
+        drowsiness_detected = True
+        drowsiness_reason = "HEAD NODDING DOWN"
+else:
+    head_tilt_start_time = None
